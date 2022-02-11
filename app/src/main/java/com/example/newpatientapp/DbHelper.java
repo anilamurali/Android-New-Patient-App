@@ -2,6 +2,7 @@ package com.example.newpatientapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -52,5 +53,44 @@ public class DbHelper extends SQLiteOpenHelper {
         {
             return true;
         }
+    }
+    public Cursor searchPatient(String pmobile)
+    {
+        SQLiteDatabase sqLiteDatabase=this.getWritableDatabase();
+        String query="select * from "+PatientTable+" where "+col5+"="+"'"+pmobile+"'";
+        Cursor c=sqLiteDatabase.rawQuery(query,null);
+        return c;
+    }
+    public boolean patientDelete(String mobile)
+    {
+        SQLiteDatabase sqLiteDatabase=this.getWritableDatabase();
+        long status=sqLiteDatabase.delete(PatientTable,col5+"="+mobile,null);
+        if (status == -1)
+        {
+
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    public boolean upadatePatient(String mobile,String pcode,String pname,String address,String dname){
+        SQLiteDatabase sqLiteDatabase=this.getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        contentValues.put(col2,pcode);
+        contentValues.put(col3,pname);
+        contentValues.put(col4,address);
+        contentValues.put(col6,dname);
+        long status=sqLiteDatabase.update(PatientTable,contentValues,col5+"="+mobile,null);
+        if (status==-1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
     }
 }
